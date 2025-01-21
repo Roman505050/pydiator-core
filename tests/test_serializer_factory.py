@@ -1,4 +1,5 @@
-from pydiator_core.serializer import BaseSerializer, SerializerFactory, Serializer
+from pydiator_core.serializer import (BaseSerializer, Serializer,
+                                      SerializerFactory)
 from tests.base_test_case import BaseTestCase, TestResponse
 
 

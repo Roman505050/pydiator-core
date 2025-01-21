@@ -1,4 +1,7 @@
-from pydiator_core.interfaces import BaseRequest, BasePipeline, BaseCacheable, CacheType, BaseCacheProvider
+from typing import Optional
+
+from pydiator_core.interfaces import (BaseCacheable, BaseCacheProvider,
+                                      BasePipeline, CacheType, TReq, TRes)
 from pydiator_core.serializer import SerializerFactory
 
 
@@ -6,13 +9,15 @@ class CachePipeline(BasePipeline):
     def __init__(self, cache_provider: BaseCacheProvider) -> None:
         self.cache_provider = cache_provider
 
-    async def handle(self, req: BaseRequest, **kwargs) -> object:
+    async def handle(self, req: TReq, **kwargs) -> TRes:
         if self.next() is None:
             raise Exception("pydiator_cache_pipeline_has_no_next_pipeline")
 
         next_handle = getattr(self.next(), "handle", None)
         if next_handle is None or not callable(next_handle):
-            raise Exception("handle_function_of_next_pipeline_is_not_valid_for_cache_pipeline")
+            raise Exception(
+                "handle_function_of_next_pipeline_is_not_valid_for_cache_pipeline"
+            )
 
         if self.cache_provider is None:
             return await next_handle(req=req, **kwargs)
@@ -30,18 +35,23 @@ class CachePipeline(BasePipeline):
                         response = await next_handle(req, **kwargs)
 
                         cache_duration = req.get_cache_duration()
-                        if response is not None and response != "" and cache_duration > 0:
-                            self.__add_to_cache(response, cache_key, cache_duration)
+                        if (
+                            response is not None
+                            and response != ""
+                            and cache_duration > 0
+                        ):
+                            self.__add_to_cache(
+                                response, cache_key, cache_duration
+                            )
 
                         return response
 
         return await next_handle(req, **kwargs)
 
-    def __get_from_cache(self, cache_key) -> object:
+    def __get_from_cache(self, cache_key) -> Optional[TRes]:
         cached_obj_str = self.cache_provider.get(cache_key)
         if cached_obj_str is not None:
             return self.__get_serializer().loads(cached_obj_str)
-
         return None
 
     def __add_to_cache(self, res: object, cache_key, cache_duration):

@@ -1,11 +1,41 @@
+# IDE files
+.idea
+.vscode
+
+# Virtual Environments
 venv
+.venv
+
+# poetry
+#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
+#   This is especially recommended for binary packages to ensure reproducibility, and is more
+#   commonly ignored for libraries.
+#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
+# poetry.lock
+
+# Build files
+dist
+build
+.eggs
+*.egg-info
+
+# Security files
+certs/
+*.pem
+.env
+.env.*
+!.env.example
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Cache files
+*.cache
+*.log
+*.log.*
+.mypy_cache/
 .data
 .pytest_cache
 htmlcov
-
-dist
-build
-.idea
-.eggs
-pydiator_core.egg-info
-pydiator_core_test.egg-info

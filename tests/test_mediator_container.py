@@ -1,7 +1,8 @@
+from pydiator_core.interfaces import BaseNotification, BaseRequest
 from pydiator_core.mediatr_container import MediatrContainer
-from pydiator_core.interfaces import BaseRequest, BaseNotification
-from tests.base_test_case import BaseTestCase, TestPipeline, TestRequest, TestResponse, TestHandler, TestNotification, \
-    TestNotificationHandler
+from tests.base_test_case import (BaseTestCase, TestHandler, TestNotification,
+                                  TestNotificationHandler, TestPipeline,
+                                  TestRequest, TestResponse)
 
 
 class TestMediatrContainer(BaseTestCase):
@@ -21,8 +22,14 @@ class TestMediatrContainer(BaseTestCase):
         assert container.get_requests() == {}
         assert container.get_notifications() == {}
         assert container.get_pipelines() == []
-        assert container._MediatrContainer__base_notification_get_class_method_name == BaseNotification.get_class_name.__name__
-        assert container._MediatrContainer__base_notification_get_class_method_name == BaseRequest.get_class_name.__name__
+        assert (
+            container._MediatrContainer__base_notification_get_class_method_name
+            == BaseNotification.get_class_name.__name__
+        )
+        assert (
+            container._MediatrContainer__base_notification_get_class_method_name
+            == BaseRequest.get_class_name.__name__
+        )
 
     def test_register_pipeline(self):
         # Given
@@ -58,19 +65,25 @@ class TestMediatrContainer(BaseTestCase):
         container = MediatrContainer()
 
         # When
-        container.register_notification(TestNotification, [TestNotificationHandler()])
+        container.register_notification(
+            TestNotification, [TestNotificationHandler()]
+        )
 
         # Then
         assert container.get_requests() == {}
         assert container.get_pipelines() == []
         assert len(container.get_notifications()) == 1
 
-    def test_register_notification_when_notification__is_not_instance_of_base_notification(self):
+    def test_register_notification_when_notification__is_not_instance_of_base_notification(
+        self,
+    ):
         # Given
         container = MediatrContainer()
 
         # When
-        container.register_notification(MediatrContainer, [TestNotificationHandler()])
+        container.register_notification(
+            MediatrContainer, [TestNotificationHandler()]
+        )
         response = container.get_notifications()
 
         # Then
@@ -106,10 +119,16 @@ class TestMediatrContainer(BaseTestCase):
         # Then
         assert container.get_notifications() == {}
         assert len(container.get_requests()) == 1
-        assert container.get_requests()[TestRequest.get_class_name()] is not None
-        assert container.get_requests()[TestRequest.get_class_name()] == handler
+        assert (
+            container.get_requests()[TestRequest.get_class_name()] is not None
+        )
+        assert (
+            container.get_requests()[TestRequest.get_class_name()] == handler
+        )
 
-    def test_register_request_return_when_request_is_not_instance_of_base_request(self):
+    def test_register_request_return_when_request_is_not_instance_of_base_request(
+        self,
+    ):
         # Given
         handler = TestHandler()
         container = MediatrContainer()
@@ -120,7 +139,9 @@ class TestMediatrContainer(BaseTestCase):
         # Then
         assert len(container.get_requests()) == 0
 
-    def test_register_request_return_when_handler_is_not_instance_of_base_handler(self):
+    def test_register_request_return_when_handler_is_not_instance_of_base_handler(
+        self,
+    ):
         # Given
         container = MediatrContainer()
 

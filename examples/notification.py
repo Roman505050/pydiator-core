@@ -1,6 +1,6 @@
 import asyncio
 
-from pydiator_core.interfaces import BaseNotificationHandler, BaseNotification
+from pydiator_core.interfaces import BaseNotification, BaseNotificationHandler
 
 
 # notification object
@@ -43,8 +43,10 @@ from pydiator_core.mediatr_container import MediatrContainer
 def set_up_pydiator():
     container = MediatrContainer()
     # Sample1Subscriber,Sample2Subscriber,Sample3Subscriber are triggered for every SampleNotification
-    container.register_notification(SampleNotification, [Sample1Subscriber(), Sample2Subscriber(),
-                                                         Sample3Subscriber()])
+    container.register_notification(
+        SampleNotification,
+        [Sample1Subscriber(), Sample2Subscriber(), Sample3Subscriber()],
+    )
     pydiator.ready(container=container)
 
 

@@ -1,6 +1,9 @@
-from pydiator_core.interfaces import BaseRequest, BaseNotification, BaseMediatr, BaseMediatrContainer
+from typing import Optional
+
 from pydiator_core.default_pipeline import DefaultPipeline
-from pydiator_core.logger import LoggerFactory, BaseLogger
+from pydiator_core.interfaces import (BaseMediatr, BaseMediatrContainer,
+                                      BaseNotification, TReq, TRes)
+from pydiator_core.logger import BaseLogger, LoggerFactory
 from pydiator_core.serializer import BaseSerializer, SerializerFactory
 
 
@@ -10,7 +13,12 @@ class Mediatr(BaseMediatr):
         self.__container = None
         self.is_ready = False
 
-    def ready(self, container: BaseMediatrContainer, serializer: BaseSerializer = None, logger: BaseLogger = None):
+    def ready(
+        self,
+        container: BaseMediatrContainer,
+        serializer: Optional[BaseSerializer] = None,
+        logger: Optional[BaseLogger] = None,
+    ):
         if self.is_ready:
             return
 
@@ -28,7 +36,7 @@ class Mediatr(BaseMediatr):
 
         self.is_ready = True
 
-    async def send(self, req: BaseRequest, **kwargs) -> object:
+    async def send(self, req: TReq, **kwargs) -> TRes:
         if self.__container is None:
             raise Exception("mediatr_container_is_none")
 
@@ -38,11 +46,15 @@ class Mediatr(BaseMediatr):
 
         return await pipelines[0].handle(req=req, **kwargs)
 
-    async def publish(self, notification: BaseNotification, throw_exception: bool = False):
+    async def publish(
+        self, notification: BaseNotification, throw_exception: bool = False
+    ):
         notification_type_name = notification.get_class_name()
         notifications_obj = self.__container.get_notifications()
         if notification_type_name not in notifications_obj:
-            raise Exception(f"mediatr_container_has_not_contain_any_notification_handler_for:{notification_type_name}")
+            raise Exception(
+                f"mediatr_container_has_not_contain_any_notification_handler_for:{notification_type_name}"
+            )
 
         handlers = notifications_obj[notification_type_name]
         for h in handlers:

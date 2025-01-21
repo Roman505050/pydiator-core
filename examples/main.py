@@ -1,6 +1,6 @@
 import asyncio
 
-from pydiator_core.interfaces import BaseRequest, BaseResponse, BaseHandler
+from pydiator_core.interfaces import BaseHandler, BaseRequest, BaseResponse
 from pydiator_core.pipelines.log_pipeline import LogPipeline
 
 
@@ -16,7 +16,7 @@ class GetSampleByIdResponse(BaseResponse):
 
 
 class GetSampleByIdUseCase(BaseHandler):
-    async def handle(self, req: GetSampleByIdRequest):
+    async def handle(self, req: GetSampleByIdRequest) -> GetSampleByIdResponse:
         # related codes are here such as business
         return GetSampleByIdResponse(id=req.id, title="hello pydiator")
 
@@ -35,6 +35,8 @@ def set_up_pydiator():
 if __name__ == "__main__":
     set_up_pydiator()
     loop = asyncio.new_event_loop()
-    response: GetSampleByIdResponse = loop.run_until_complete(pydiator.send(GetSampleByIdRequest(id=1)))
+    response: GetSampleByIdResponse = loop.run_until_complete(
+        pydiator.send(GetSampleByIdRequest(id=1))
+    )
     loop.close()
     print(response.to_json())

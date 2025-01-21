@@ -2,9 +2,10 @@ from unittest.mock import MagicMock
 
 from pydiator_core.interfaces import CacheType
 from pydiator_core.pipelines.cache_pipeline import CachePipeline
-from tests.base_test_case import BaseTestCase, TestRequest, TestPipeline, TestRequestWithCacheable, TestResponse, \
-    FakeCacheProvider
 from pydiator_core.serializer import SerializerFactory
+from tests.base_test_case import (BaseTestCase, FakeCacheProvider,
+                                  TestPipeline, TestRequest,
+                                  TestRequestWithCacheable, TestResponse)
 
 
 class TestCachePipeline(BaseTestCase):
@@ -23,7 +24,10 @@ class TestCachePipeline(BaseTestCase):
             self.async_loop(cache_pipeline.handle(TestRequest()))
 
         # Then
-        assert context.exception.args[0] == 'pydiator_cache_pipeline_has_no_next_pipeline'
+        assert (
+            context.exception.args[0]
+            == "pydiator_cache_pipeline_has_no_next_pipeline"
+        )
 
     def test_handle_continue_when_cache_provider_is_none(self):
         # Given
@@ -58,7 +62,10 @@ class TestCachePipeline(BaseTestCase):
             self.async_loop(cache_pipeline.handle(TestRequest()))
 
         # Then
-        assert context.exception.args[0] == 'handle_function_of_next_pipeline_is_not_valid_for_cache_pipeline'
+        assert (
+            context.exception.args[0]
+            == "handle_function_of_next_pipeline_is_not_valid_for_cache_pipeline"
+        )
 
     def test_handle_when_next_handle_is_not_callable(self):
         # Given
@@ -73,7 +80,10 @@ class TestCachePipeline(BaseTestCase):
             self.async_loop(cache_pipeline.handle(TestRequest()))
 
         # Then
-        assert context.exception.args[0] == 'handle_function_of_next_pipeline_is_not_valid_for_cache_pipeline'
+        assert (
+            context.exception.args[0]
+            == "handle_function_of_next_pipeline_is_not_valid_for_cache_pipeline"
+        )
 
     def test_handle_when_req_is_no_cache(self):
         # Given
@@ -87,7 +97,9 @@ class TestCachePipeline(BaseTestCase):
         mock_test_pipeline.handle = next_handle
         cache_pipeline.set_next(mock_test_pipeline)
 
-        test_request = TestRequestWithCacheable("cache_key", 1, CacheType.DISTRIBUTED)
+        test_request = TestRequestWithCacheable(
+            "cache_key", 1, CacheType.DISTRIBUTED
+        )
         test_request.set_no_cache()
 
         # When
@@ -152,7 +164,11 @@ class TestCachePipeline(BaseTestCase):
         cache_pipeline.set_next(mock_test_pipeline)
 
         # When
-        response = self.async_loop(cache_pipeline.handle(TestRequestWithCacheable("", 1, CacheType.DISTRIBUTED)))
+        response = self.async_loop(
+            cache_pipeline.handle(
+                TestRequestWithCacheable("", 1, CacheType.DISTRIBUTED)
+            )
+        )
 
         # Then
         assert response is not None
@@ -174,7 +190,9 @@ class TestCachePipeline(BaseTestCase):
         cache_pipeline = CachePipeline(mock_cache_provider)
         cache_pipeline.set_next(mock_test_pipeline)
 
-        test_request = TestRequestWithCacheable("cache_key", 1, CacheType.DISTRIBUTED)
+        test_request = TestRequestWithCacheable(
+            "cache_key", 1, CacheType.DISTRIBUTED
+        )
 
         # When
         response = self.async_loop(cache_pipeline.handle(test_request))
@@ -183,24 +201,33 @@ class TestCachePipeline(BaseTestCase):
         assert response is not None
         assert isinstance(response, TestResponse)
         assert response == next_response
-        mock_cache_provider.get.assert_called_once_with(test_request.get_cache_key())
-        mock_cache_provider.add.assert_called_once_with(test_request.get_cache_key(),
-                                                        SerializerFactory.get_serializer().dumps(next_response),
-                                                        test_request.get_cache_duration())
+        mock_cache_provider.get.assert_called_once_with(
+            test_request.get_cache_key()
+        )
+        mock_cache_provider.add.assert_called_once_with(
+            test_request.get_cache_key(),
+            SerializerFactory.get_serializer().dumps(next_response),
+            test_request.get_cache_duration(),
+        )
 
     def test_handle_when_req_result_is_in_cache(self):
         # Given
         next_response = TestResponse(success=True)
 
         mock_cache_provider = MagicMock()
-        mock_cache_provider.get.return_value = SerializerFactory.get_serializer().dumps(next_response)
+        mock_cache_provider.get.return_value = (
+            SerializerFactory.get_serializer().dumps(next_response)
+        )
 
         cache_pipeline = CachePipeline(mock_cache_provider)
         cache_pipeline.set_next(TestPipeline(True))
 
         # When
         response = self.async_loop(
-            cache_pipeline.handle(TestRequestWithCacheable("cache_key", 1, CacheType.DISTRIBUTED)))
+            cache_pipeline.handle(
+                TestRequestWithCacheable("cache_key", 1, CacheType.DISTRIBUTED)
+            )
+        )
 
         # Then
         assert response is not None

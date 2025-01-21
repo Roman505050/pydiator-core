@@ -1,5 +1,6 @@
 from typing import List
-from pydiator_core.interfaces import BaseRequest, BasePipeline
+
+from pydiator_core.interfaces import BasePipeline, TReq, TRes
 from pydiator_core.logger import LoggerFactory
 from pydiator_core.serializer import SerializerFactory
 
@@ -9,7 +10,7 @@ class LogPipeline(BasePipeline):
         self.serializer = None
         self.logger = LoggerFactory.get_logger()
 
-    async def handle(self, req: BaseRequest, **kwargs) -> object:
+    async def handle(self, req: TReq, **kwargs) -> TRes:
         self.serializer = SerializerFactory.get_serializer()
 
         if self.next() is None:
@@ -17,7 +18,9 @@ class LogPipeline(BasePipeline):
 
         next_handle = getattr(self.next(), "handle", None)
         if next_handle is None or not callable(next_handle):
-            raise Exception("handle_function_of_next_pipeline_is_not_valid_for_log_pipeline")
+            raise Exception(
+                "handle_function_of_next_pipeline_is_not_valid_for_log_pipeline"
+            )
 
         response = await next_handle(req=req, **kwargs)
 
@@ -26,12 +29,11 @@ class LogPipeline(BasePipeline):
         else:
             _response = str(response)
 
-        log_obj = {
-            "req": self.serializer.deserialize(req),
-            "res": _response
-        }
+        log_obj = {"req": self.serializer.deserialize(req), "res": _response}
 
         req_type_name = req.get_class_name()
-        self.logger.log(source=self.__class__.__name__, message=req_type_name, data=log_obj)
+        self.logger.log(
+            source=self.__class__.__name__, message=req_type_name, data=log_obj
+        )
 
         return response

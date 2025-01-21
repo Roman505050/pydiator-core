@@ -13,7 +13,7 @@ class Logger(BaseLogger):
         pass
 
     def log(self, source: str, message: str, data: object = None):
-        print(f'source:{source}, message:{message}, data:{data}')
+        print(f"source:{source}, message:{message}, data:{data}")
 
 
 class LoggerFactory:

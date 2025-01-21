@@ -22,7 +22,10 @@ class TestLogPipeline(BaseTestCase):
             self.async_loop(log_pipeline.handle(TestRequest()))
 
         # Then
-        assert context.exception.args[0] == 'pydiator_log_pipeline_has_no_next_pipeline'
+        assert (
+            context.exception.args[0]
+            == "pydiator_log_pipeline_has_no_next_pipeline"
+        )
 
     def test_handle_return_exception_when_next_handle_is_none(self):
         # Given
@@ -37,7 +40,10 @@ class TestLogPipeline(BaseTestCase):
             self.async_loop(log_pipeline.handle(TestRequest()))
 
         # Then
-        assert context.exception.args[0] == 'handle_function_of_next_pipeline_is_not_valid_for_log_pipeline'
+        assert (
+            context.exception.args[0]
+            == "handle_function_of_next_pipeline_is_not_valid_for_log_pipeline"
+        )
 
     def test_handle_when_response_is_str(self):
         # Given
@@ -61,7 +67,9 @@ class TestLogPipeline(BaseTestCase):
 
     @mock.patch("pydiator_core.pipelines.log_pipeline.LoggerFactory")
     @mock.patch("pydiator_core.pipelines.log_pipeline.SerializerFactory")
-    def test_handle_when_response_is_instance_of_dict(self, mock_serializer_factory, mock_logger_factory):
+    def test_handle_when_response_is_instance_of_dict(
+        self, mock_serializer_factory, mock_logger_factory
+    ):
         # Given
         next_response = TestResponse(success=True)
 
@@ -81,12 +89,19 @@ class TestLogPipeline(BaseTestCase):
         assert response is not None
         assert response == next_response
         assert mock_serializer_factory.get_serializer.called
-        assert mock_serializer_factory.get_serializer.return_value.deserialize.called
-        assert mock_serializer_factory.get_serializer.return_value.deserialize.call_count == 2
+        assert (
+            mock_serializer_factory.get_serializer.return_value.deserialize.called
+        )
+        assert (
+            mock_serializer_factory.get_serializer.return_value.deserialize.call_count
+            == 2
+        )
 
     @mock.patch("pydiator_core.pipelines.log_pipeline.LoggerFactory")
     @mock.patch("pydiator_core.pipelines.log_pipeline.SerializerFactory")
-    def test_handle_when_response_type_is_list(self, mock_serializer_factory, mock_logger_factory):
+    def test_handle_when_response_type_is_list(
+        self, mock_serializer_factory, mock_logger_factory
+    ):
         # Given
         next_response = [TestResponse(success=True)]
 
@@ -107,8 +122,13 @@ class TestLogPipeline(BaseTestCase):
         assert response == next_response
         assert len(response) == 1
         assert mock_serializer_factory.get_serializer.called
-        assert mock_serializer_factory.get_serializer.return_value.deserialize.called
-        assert mock_serializer_factory.get_serializer.return_value.deserialize.call_count == 2
+        assert (
+            mock_serializer_factory.get_serializer.return_value.deserialize.called
+        )
+        assert (
+            mock_serializer_factory.get_serializer.return_value.deserialize.call_count
+            == 2
+        )
         assert mock_logger_factory.get_logger.called
         assert mock_logger_factory.get_logger.return_value.log.called
         assert mock_logger_factory.get_logger.return_value.log.call_count == 1
@@ -137,7 +157,8 @@ class TestLogPipeline(BaseTestCase):
         assert mock_logger_factory.get_logger.called
         assert mock_logger_factory.get_logger.return_value.log.called
         assert mock_logger_factory.get_logger.return_value.log.call_count == 1
-        mock_logger_factory.get_logger.return_value. \
-            log.assert_called_once_with(source="LogPipeline",
-                                        message="TestRequest",
-                                        data={'req': {}, 'res': [{'success': True}]})
+        mock_logger_factory.get_logger.return_value.log.assert_called_once_with(
+            source="LogPipeline",
+            message="TestRequest",
+            data={"req": {}, "res": [{"success": True}]},
+        )

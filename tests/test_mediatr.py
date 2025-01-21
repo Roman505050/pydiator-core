@@ -2,10 +2,11 @@ from unittest import mock
 from unittest.mock import MagicMock
 
 from pydiator_core.interfaces import BaseNotification
-from pydiator_core.logger import LoggerFactory, BaseLogger
+from pydiator_core.logger import BaseLogger, LoggerFactory
 from pydiator_core.mediatr import Mediatr
-from pydiator_core.serializer import SerializerFactory, BaseSerializer
-from tests.base_test_case import BaseTestCase, TestRequest, TestResponse, FakeMediatrContainer, TestNotification
+from pydiator_core.serializer import BaseSerializer, SerializerFactory
+from tests.base_test_case import (BaseTestCase, FakeMediatrContainer,
+                                  TestNotification, TestRequest, TestResponse)
 
 
 class TestMediatrContainer(BaseTestCase):
@@ -59,7 +60,7 @@ class TestMediatrContainer(BaseTestCase):
 
         # Then
         assert mediatr.is_ready is False
-        assert 'mediatr_container_is_none' == context.exception.args[0]
+        assert "mediatr_container_is_none" == context.exception.args[0]
 
     def test_ready_when_serializer_is_not_none(self):
         # Given
@@ -95,7 +96,9 @@ class TestMediatrContainer(BaseTestCase):
 
         # Then
         assert mediatr.is_ready is True
-        assert not isinstance(SerializerFactory.get_serializer(), BaseSerializer)
+        assert not isinstance(
+            SerializerFactory.get_serializer(), BaseSerializer
+        )
         assert SerializerFactory.get_serializer() == {}
         assert len(container.get_pipelines()) == 1
 
@@ -134,7 +137,7 @@ class TestMediatrContainer(BaseTestCase):
             self.async_loop(mediatr.send(TestRequest()))
 
         # Then
-        assert 'mediatr_container_is_none' == context.exception.args[0]
+        assert "mediatr_container_is_none" == context.exception.args[0]
 
     def test_send_raise_exception_when_container_pipelines_is_empty(self):
         # Given
@@ -148,10 +151,15 @@ class TestMediatrContainer(BaseTestCase):
             self.async_loop(mediatr.send(TestRequest()))
 
         # Then
-        assert 'mediatr_container_has_not_contain_any_pipeline' == context.exception.args[0]
+        assert (
+            "mediatr_container_has_not_contain_any_pipeline"
+            == context.exception.args[0]
+        )
 
     @mock.patch("pydiator_core.mediatr.DefaultPipeline")
-    def test_send_return_default_pipeline_result_when_container_pipelines_is_empty(self, mock_default_pipeline):
+    def test_send_return_default_pipeline_result_when_container_pipelines_is_empty(
+        self, mock_default_pipeline
+    ):
         # Given
         next_response = TestResponse(success=True)
 
@@ -182,8 +190,10 @@ class TestMediatrContainer(BaseTestCase):
             self.async_loop(mediatr.publish(BaseNotification()))
 
         # Then
-        assert 'mediatr_container_has_not_contain_any_notification_handler_for:BaseNotification' == \
-               context.exception.args[0]
+        assert (
+            "mediatr_container_has_not_contain_any_notification_handler_for:BaseNotification"
+            == context.exception.args[0]
+        )
 
     def test_publish_when_handlers_exist(self):
         # Given
@@ -194,7 +204,9 @@ class TestMediatrContainer(BaseTestCase):
         mock_notification_handler.handle.side_effect = next_handle
 
         container = FakeMediatrContainer()
-        container.register_notification(TestNotification(), [mock_notification_handler])
+        container.register_notification(
+            TestNotification(), [mock_notification_handler]
+        )
 
         mediatr = Mediatr()
         mediatr.ready(container)
@@ -215,7 +227,9 @@ class TestMediatrContainer(BaseTestCase):
         mock_notification_handler.handle.side_effect = next_handle
 
         container = FakeMediatrContainer()
-        container.register_notification(TestNotification(), [mock_notification_handler])
+        container.register_notification(
+            TestNotification(), [mock_notification_handler]
+        )
 
         mediatr = Mediatr()
         mediatr.ready(container)
@@ -236,16 +250,22 @@ class TestMediatrContainer(BaseTestCase):
         mock_notification_handler.handle.side_effect = next_handle
 
         container = FakeMediatrContainer()
-        container.register_notification(TestNotification(), [mock_notification_handler])
+        container.register_notification(
+            TestNotification(), [mock_notification_handler]
+        )
 
         mediatr = Mediatr()
         mediatr.ready(container)
 
         # When
         with self.assertRaises(Exception) as context:
-            self.async_loop(mediatr.publish(notification=TestNotification(), throw_exception=True))
+            self.async_loop(
+                mediatr.publish(
+                    notification=TestNotification(), throw_exception=True
+                )
+            )
 
         # Then
         assert mock_notification_handler.handle.called
         assert mock_notification_handler.handle.call_count == 1
-        assert 'test_exception' == context.exception.args[0]
+        assert "test_exception" == context.exception.args[0]

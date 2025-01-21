@@ -1,11 +1,15 @@
 import asyncio
-from typing import List
+from typing import List, Type
 from unittest import TestCase
 
-from pydiator_core.interfaces import BaseRequest, BaseResponse, BaseHandler, BasePipeline, BaseNotification, \
-    BaseNotificationHandler, BaseCacheable, CacheType, BaseCacheProvider
-from pydiator_core.mediatr_container import MediatrContainer, BaseMediatrContainer
+from pydiator_core.interfaces import (BaseCacheable, BaseCacheProvider,
+                                      BaseHandler, BaseNotification,
+                                      BaseNotificationHandler, BasePipeline,
+                                      BaseRequest, BaseResponse, CacheType,
+                                      TReq, TRes)
 from pydiator_core.mediatr import pydiator
+from pydiator_core.mediatr_container import (BaseMediatrContainer,
+                                             MediatrContainer)
 
 
 class BaseTestCase(TestCase):
@@ -56,21 +60,20 @@ class TestResponse(BaseResponse):
 
 
 class TestHandler(BaseHandler):
-    async def handle(self, req: BaseRequest):
-        return TestResponse(success=True)
-
-
-class TestSyncHandler(BaseHandler):
-    def handle(self, req: BaseRequest):
+    async def handle(self, req: BaseRequest) -> TestResponse:
         return TestResponse(success=True)
 
 
 class TestPipeline(BasePipeline):
     def __init__(self, response_success):
         self.response_success = response_success
+        self.set_next(TestHandler())
 
-    async def handle(self, req: BaseRequest) -> object:
-        return TestResponse(success=self.response_success)
+    async def handle(self, req: TReq) -> TRes:
+
+        next_handler = self.next()
+
+        return await next_handler.handle(req)
 
 
 class TestNotification(BaseNotification):
@@ -94,13 +97,19 @@ class FakeMediatrContainer(BaseMediatrContainer):
         self.__notifications = {}
         self.__pipelines = []
 
-    def register_request(self, req: BaseRequest, handler: BaseHandler):
-        return
+    def register_request(
+        self, req: Type[BaseRequest], handler: BaseHandler
+    ) -> None:
+        pass
 
     def register_pipeline(self, pipeline: BasePipeline):
         self.__pipelines.append(pipeline)
 
-    def register_notification(self, notification: BaseNotification, handlers: List[BaseNotificationHandler]):
+    def register_notification(
+        self,
+        notification: Type[BaseNotification],
+        handlers: List[BaseNotificationHandler],
+    ):
         self.__notifications[type(notification).__name__] = handlers
 
     def get_requests(self):

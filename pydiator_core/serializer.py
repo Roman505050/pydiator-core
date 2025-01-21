@@ -1,5 +1,5 @@
-import json
 import datetime
+import json
 from abc import ABC, abstractmethod
 from decimal import Decimal
 from uuid import UUID
@@ -37,14 +37,26 @@ class Serializer(BaseSerializer):
     def dumps(self, obj):
         """Converts List to Json String"""
         if isinstance(obj, list):
-            return json.dumps(obj, default=lambda x: x.__dict__, cls=Serializer.CustomEncoder, sort_keys=True,
-                              indent=4)
+            return json.dumps(
+                obj,
+                default=lambda x: x.__dict__,
+                cls=Serializer.CustomEncoder,
+                sort_keys=True,
+                indent=4,
+            )
 
         """Converts to Json String"""
         if isinstance(obj, dict):
-            return json.dumps(obj, cls=Serializer.CustomEncoder, sort_keys=True, indent=4)
+            return json.dumps(
+                obj, cls=Serializer.CustomEncoder, sort_keys=True, indent=4
+            )
 
-        return json.dumps(obj.__dict__, cls=Serializer.CustomEncoder, sort_keys=True, indent=4).encode()
+        return json.dumps(
+            obj.__dict__,
+            cls=Serializer.CustomEncoder,
+            sort_keys=True,
+            indent=4,
+        ).encode()
 
     def loads(self, obj):
         return json.loads(obj)
@@ -60,7 +72,9 @@ class Serializer(BaseSerializer):
             if isinstance(obj, UUID):
                 return str(obj)
 
-            if isinstance(obj, datetime.datetime) or isinstance(obj, datetime.date):
+            if isinstance(obj, datetime.datetime) or isinstance(
+                obj, datetime.date
+            ):
                 return obj.isoformat()
 
             if isinstance(obj, object):
