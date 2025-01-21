@@ -1,6 +1,8 @@
-pytest==6.3.2
-coverage==5.3
+pytest==8.3.4; python_version > '3.8'
+coverage==7.6.10; python_version > '3.8'
 
+pytest==5.3; python_version == '3.8'
+coverage==6.3.2; python_version == '3.8'
 
 
 
