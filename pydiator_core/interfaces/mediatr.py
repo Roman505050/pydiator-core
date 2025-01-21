@@ -1,15 +1,17 @@
 from abc import ABC, abstractmethod
 from typing import Dict, List, Type
 
-from pydiator_core.interfaces import (
+from pydiator_core.interfaces.handler import (
     BaseHandler,
-    BaseNotification,
-    BaseNotificationHandler,
-    BasePipeline,
     BaseRequest,
     TReq,
     TRes,
 )
+from pydiator_core.interfaces.notification import (
+    BaseNotification,
+    BaseNotificationHandler,
+)
+from pydiator_core.interfaces.pipeline import BasePipeline
 
 
 class BaseMediatr(ABC):

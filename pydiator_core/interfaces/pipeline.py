@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Union
 
-from pydiator_core.interfaces import BaseHandler, TReq, TRes
+from pydiator_core.interfaces.handler import BaseHandler, TReq, TRes
 
 
 class BasePipeline(ABC):
