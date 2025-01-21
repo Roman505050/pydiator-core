@@ -77,12 +77,9 @@ class TestHandler(BaseHandler):
 class TestPipeline(BasePipeline):
     def __init__(self, response_success):
         self.response_success = response_success
-        self.set_next(TestHandler())
 
     async def handle(self, req: TReq) -> TRes:
-
         next_handler = self.next()
-
         return await next_handler.handle(req)
 
 
