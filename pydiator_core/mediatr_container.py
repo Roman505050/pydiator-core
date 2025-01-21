@@ -1,9 +1,13 @@
 from typing import Dict, List, Type
 
-from pydiator_core.interfaces import (BaseHandler, BaseMediatrContainer,
-                                      BaseNotification,
-                                      BaseNotificationHandler, BasePipeline,
-                                      BaseRequest)
+from pydiator_core.interfaces import (
+    BaseHandler,
+    BaseMediatrContainer,
+    BaseNotification,
+    BaseNotificationHandler,
+    BasePipeline,
+    BaseRequest,
+)
 
 
 class MediatrContainer(BaseMediatrContainer):

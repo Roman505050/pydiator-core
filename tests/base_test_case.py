@@ -2,14 +2,24 @@ import asyncio
 from typing import List, Type
 from unittest import TestCase
 
-from pydiator_core.interfaces import (BaseCacheable, BaseCacheProvider,
-                                      BaseHandler, BaseNotification,
-                                      BaseNotificationHandler, BasePipeline,
-                                      BaseRequest, BaseResponse, CacheType,
-                                      TReq, TRes)
+from pydiator_core.interfaces import (
+    BaseCacheable,
+    BaseCacheProvider,
+    BaseHandler,
+    BaseNotification,
+    BaseNotificationHandler,
+    BasePipeline,
+    BaseRequest,
+    BaseResponse,
+    CacheType,
+    TReq,
+    TRes,
+)
 from pydiator_core.mediatr import pydiator
-from pydiator_core.mediatr_container import (BaseMediatrContainer,
-                                             MediatrContainer)
+from pydiator_core.mediatr_container import (
+    BaseMediatrContainer,
+    MediatrContainer,
+)
 
 
 class BaseTestCase(TestCase):

@@ -3,9 +3,14 @@ from unittest.mock import MagicMock
 from pydiator_core.interfaces import CacheType
 from pydiator_core.pipelines.cache_pipeline import CachePipeline
 from pydiator_core.serializer import SerializerFactory
-from tests.base_test_case import (BaseTestCase, FakeCacheProvider,
-                                  TestPipeline, TestRequest,
-                                  TestRequestWithCacheable, TestResponse)
+from tests.base_test_case import (
+    BaseTestCase,
+    FakeCacheProvider,
+    TestPipeline,
+    TestRequest,
+    TestRequestWithCacheable,
+    TestResponse,
+)
 
 
 class TestCachePipeline(BaseTestCase):

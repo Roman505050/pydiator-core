@@ -1,5 +1,4 @@
-from pydiator_core.interfaces import BasePipeline
-from pydiator_core.interfaces.handler import TReq, TRes
+from pydiator_core.interfaces import BasePipeline, TReq, TRes
 from pydiator_core.mediatr_container import BaseMediatrContainer
 
 

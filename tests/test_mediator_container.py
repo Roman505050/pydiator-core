@@ -1,8 +1,14 @@
 from pydiator_core.interfaces import BaseNotification, BaseRequest
 from pydiator_core.mediatr_container import MediatrContainer
-from tests.base_test_case import (BaseTestCase, TestHandler, TestNotification,
-                                  TestNotificationHandler, TestPipeline,
-                                  TestRequest, TestResponse)
+from tests.base_test_case import (
+    BaseTestCase,
+    TestHandler,
+    TestNotification,
+    TestNotificationHandler,
+    TestPipeline,
+    TestRequest,
+    TestResponse,
+)
 
 
 class TestMediatrContainer(BaseTestCase):

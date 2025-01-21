@@ -1,8 +1,13 @@
 from typing import Optional
 
 from pydiator_core.default_pipeline import DefaultPipeline
-from pydiator_core.interfaces import (BaseMediatr, BaseMediatrContainer,
-                                      BaseNotification, TReq, TRes)
+from pydiator_core.interfaces import (
+    BaseMediatr,
+    BaseMediatrContainer,
+    BaseNotification,
+    TReq,
+    TRes,
+)
 from pydiator_core.logger import BaseLogger, LoggerFactory
 from pydiator_core.serializer import BaseSerializer, SerializerFactory
 

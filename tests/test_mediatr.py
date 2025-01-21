@@ -5,8 +5,13 @@ from pydiator_core.interfaces import BaseNotification
 from pydiator_core.logger import BaseLogger, LoggerFactory
 from pydiator_core.mediatr import Mediatr
 from pydiator_core.serializer import BaseSerializer, SerializerFactory
-from tests.base_test_case import (BaseTestCase, FakeMediatrContainer,
-                                  TestNotification, TestRequest, TestResponse)
+from tests.base_test_case import (
+    BaseTestCase,
+    FakeMediatrContainer,
+    TestNotification,
+    TestRequest,
+    TestResponse,
+)
 
 
 class TestMediatrContainer(BaseTestCase):

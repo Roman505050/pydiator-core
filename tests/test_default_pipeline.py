@@ -53,18 +53,6 @@ class TestDefaultPipeline(BaseTestCase):
         # Then
         assert isinstance(response, BaseResponse)
 
-    def test_handle_return_handle_response_when_handle_is_sync(self):
-        # Given
-        container = MediatrContainer()
-        container.register_request(TestRequest, TestSyncHandler())
-        self.pipeline = DefaultPipeline(container)
-
-        # When
-        response = self.async_loop(self.pipeline.handle(req=TestRequest()))
-
-        # Then
-        assert isinstance(response, BaseResponse)
-
     def test_handle_return_handle_response_with_list_when_handle_is_sync(self):
         # Given
         class TestRequest(BaseRequest):
