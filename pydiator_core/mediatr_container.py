@@ -42,7 +42,7 @@ class MediatrContainer(BaseMediatrContainer):
 
     def register_notification(
         self,
-        notification: type[BaseNotification],
+        notification: Type[BaseNotification],
         handlers: List[BaseNotificationHandler],
     ) -> None:
         attr = getattr(
