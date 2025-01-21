@@ -44,8 +44,7 @@ class BaseTestCase(TestCase):
 
 
 class TestRequest(BaseRequest):
-    def __init__(self):
-        return
+    pass
 
 
 class TestRequestWithCacheable(BaseRequest, BaseCacheable):
@@ -86,8 +85,7 @@ class TestPipeline(BasePipeline):
 
 
 class TestNotification(BaseNotification):
-    def __init__(self):
-        return
+    pass
 
 
 class TestNotificationHandler(BaseNotificationHandler):

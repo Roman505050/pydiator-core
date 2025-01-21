@@ -20,9 +20,6 @@ class TestMediatrContainer(BaseTestCase):
         SerializerFactory.set_serializer(None)
         LoggerFactory.set_logger(None)
 
-    def tearDown(self):
-        pass
-
     def test_read_default_values_when_create_instance(self):
         # Given
 
