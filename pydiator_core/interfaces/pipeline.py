@@ -1,16 +1,18 @@
 from abc import ABC, abstractmethod
-from typing import Union
+from typing import Union, Optional
 
 from pydiator_core.interfaces.handler import BaseHandler, TReq, TRes
 
 
 class BasePipeline(ABC):
-    _next: Union[BaseHandler, "BasePipeline"]
+    _next: Optional[Union[BaseHandler, "BasePipeline"]] = None
 
-    def next(self) -> Union[BaseHandler, "BasePipeline"]:
+    def next(self) -> Optional[Union[BaseHandler, "BasePipeline"]]:
         return self._next
 
-    def set_next(self, handler: Union[BaseHandler, "BasePipeline"]) -> None:
+    def set_next(
+        self, handler: Optional[Union[BaseHandler, "BasePipeline"]]
+    ) -> None:
         self._next = handler
 
     def has_next(self) -> bool:

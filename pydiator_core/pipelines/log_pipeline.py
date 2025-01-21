@@ -13,6 +13,9 @@ class LogPipeline(BasePipeline):
     async def handle(self, req: TReq, **kwargs) -> TRes:
         self.serializer = SerializerFactory.get_serializer()
 
+        if self.next() is None:
+            raise Exception("pydiator_log_pipeline_has_no_next_pipeline")
+
         next_handle = getattr(self.next(), "handle", None)
         if next_handle is None or not callable(next_handle):
             raise Exception(

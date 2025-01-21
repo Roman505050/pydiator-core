@@ -80,6 +80,8 @@ class TestPipeline(BasePipeline):
 
     async def handle(self, req: TReq) -> TRes:
         next_handler = self.next()
+        if next_handler is None:
+            raise Exception("pydiator_cache_pipeline_has_no_next_pipeline")
         return await next_handler.handle(req)
 
 

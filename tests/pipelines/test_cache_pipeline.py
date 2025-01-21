@@ -20,6 +20,20 @@ class TestCachePipeline(BaseTestCase):
     def tearDown(self):
         pass
 
+    def test_handle_return_exception_when_next_is_none(self):
+        # Given
+        cache_pipeline = CachePipeline(FakeCacheProvider())
+
+        # When
+        with self.assertRaises(Exception) as context:
+            self.async_loop(cache_pipeline.handle(TestRequest()))
+
+        # Then
+        assert (
+            context.exception.args[0]
+            == "pydiator_cache_pipeline_has_no_next_pipeline"
+        )
+
     def test_handle_continue_when_cache_provider_is_none(self):
         # Given
         next_response = TestResponse(success=True)
