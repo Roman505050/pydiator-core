@@ -16,9 +16,6 @@ class CachePipeline(BasePipeline):
         self.cache_provider = cache_provider
 
     async def handle(self, req: TReq, **kwargs) -> TRes:
-        if self.next() is None:
-            raise Exception("pydiator_cache_pipeline_has_no_next_pipeline")
-
         next_handle = getattr(self.next(), "handle", None)
         if next_handle is None or not callable(next_handle):
             raise Exception(

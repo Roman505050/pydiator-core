@@ -12,12 +12,6 @@ from tests.base_test_case import (
 
 
 class TestMediatrContainer(BaseTestCase):
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
     def test_read_default_values_when_create_instance(self):
         # Given
 

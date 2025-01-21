@@ -13,20 +13,6 @@ class TestLogPipeline(BaseTestCase):
     def tearDown(self):
         pass
 
-    def test_handle_return_exception_when_next_is_none(self):
-        # Given
-        log_pipeline = LogPipeline()
-
-        # When
-        with self.assertRaises(Exception) as context:
-            self.async_loop(log_pipeline.handle(TestRequest()))
-
-        # Then
-        assert (
-            context.exception.args[0]
-            == "pydiator_log_pipeline_has_no_next_pipeline"
-        )
-
     def test_handle_return_exception_when_next_handle_is_none(self):
         # Given
         mock_test_pipeline = MagicMock()
